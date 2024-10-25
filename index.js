@@ -75,6 +75,32 @@ function animate() {
 		ball.yVelocity = -velocity;
 	}
 	ball.draw();
+	canvas.removeEventListener('click', clickHandler);
+	canvas.addEventListener('click', clickHandler);
 	requestAnimationFrame(animate);
 }
+
+function isInsideCircle(x, y, centerX, centerY, radius) {
+	return (
+		Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2) <= Math.pow(radius, 2)
+	);
+}
+
+function clickHandler(event) {
+	const x = event.clientX;
+	const y = event.clientY;
+	if (isInsideCircle(x, y, ball.x, ball.x, ball.radius)) {
+		console.log('inside circle');
+		if (lastCollided === 'right') {
+			ball.xVelocity -= velocity;
+		} else if (lastCollided === 'left') {
+			ball.xVelocity += velocity;
+		} else if (lastCollided === 'top') {
+			ball.yVelocity += velocity;
+		} else if (lastCollided === 'bottom') {
+			ball.yVelocity -= velocity;
+		}
+	}
+}
+
 animate();
